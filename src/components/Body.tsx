@@ -52,7 +52,7 @@ let f:number =0
               if(!t.completed)
               {
                 f++;
-                return <TaskCard t={t} id={t.id?t.id:0} setTasks={setTasks} tasks={tasks}/>
+                return <TaskCard t={t}  id={t.id?t.id:index} setTasks={setTasks} tasks={tasks}/>
               }
             })
           }

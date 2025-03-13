@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { task } from "../constants/Types";
-import { BASE_URL } from "../constants/URL";
 import axios from "axios";
 
 // {

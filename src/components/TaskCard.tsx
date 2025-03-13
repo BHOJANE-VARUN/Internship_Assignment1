@@ -20,7 +20,7 @@ function TaskCard({t,id,setTasks,tasks}:{t:task,id:number,setTasks:React.Dispatc
     
     const Arr = [...tasks]; 
     console.log(Arr); 
-    Arr.map((t:task,index:number)=>{
+    Arr.map((t:task)=>{
         if(t.id === id)
         {
           t.completed = !t.completed;

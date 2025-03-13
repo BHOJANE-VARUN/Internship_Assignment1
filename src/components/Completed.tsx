@@ -48,7 +48,7 @@ function Completed({tasks,setTasks}:CompType){
           />
         </svg> }
       </div>
-      {!Close && tasks.map((t:task,index:number,arr:task[])=> t.completed &&  <TaskCard t={t} id={t.id?t.id:0} setTasks={setTasks} tasks={arr}/>)}
+      {!Close && tasks.map((t:task,index:number,arr:task[])=> t.completed &&  <TaskCard t={t} id={t.id?t.id:index} setTasks={setTasks} tasks={arr}/>)}
     </div>
   );
 }
