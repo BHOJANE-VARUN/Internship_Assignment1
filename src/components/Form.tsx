@@ -1,18 +1,33 @@
 import { useState } from "react";
+import { task } from "../constants/Types";
+import { BASE_URL } from "../constants/URL";
+import axios from "axios";
 
-type Task = {
-  title: string;
-  description: string;
-  isCompleted: boolean;
-};
-
+// {
+//   "title": "string",
+//   "description": "string"
+// }
 type CompProps = {
-  setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
+  setTasks: React.Dispatch<React.SetStateAction<task[]>>;
   setisFormOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isFormOpen: boolean;
 };
 
 function Form({ setTasks, setisFormOpen, isFormOpen }: CompProps) {
+  
+  const addTodo = async (data: task): Promise<any> => {
+    try {
+      console.log(JSON.stringify(data));
+      await axios.post("https://training-backend-api.onrender.com/todos",JSON.stringify(data),{
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    } catch (error) {
+      console.error("Error adding todo:", error);
+    }
+  };
+  
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
@@ -20,15 +35,17 @@ function Form({ setTasks, setisFormOpen, isFormOpen }: CompProps) {
     setisFormOpen(!isFormOpen);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (title.trim() === "" || description.trim() === "") return;
     
-    const newTask: Task = {
+    const newTask: task = {
       title,
       description,
-      isCompleted: false,
+      completed: false,
     };
-    
+    //console.log(newTask);
+    await addTodo(newTask);
+
     setTasks((prevTasks) => [...prevTasks, newTask]);
     setTitle("");
     setDescription("");

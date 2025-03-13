@@ -1,11 +1,7 @@
 import { useState } from "react";
 import TaskCard from "./TaskCard";
+import { task } from "../constants/Types";
 
-type task = {
-  title:string,
-  description:string,
-  isCompleted:boolean,
-}
 interface CompType{
   tasks:task[],
   setTasks:React.Dispatch<React.SetStateAction<task[]>>,
@@ -52,7 +48,7 @@ function Completed({tasks,setTasks}:CompType){
           />
         </svg> }
       </div>
-      {!Close && tasks.map((t:task,id:number,arr:task[])=> t.isCompleted &&  <TaskCard t={t} id={id} setTasks={setTasks} tasks={arr}/>)}
+      {!Close && tasks.map((t:task,index:number,arr:task[])=> t.completed &&  <TaskCard t={t} id={t.id?t.id:0} setTasks={setTasks} tasks={arr}/>)}
     </div>
   );
 }
