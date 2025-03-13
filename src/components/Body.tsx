@@ -6,8 +6,14 @@ import TaskCard from "./TaskCard";
 import axios from "axios";
 import { BASE_URL } from "../constants/URL";
 import { task } from "../constants/Types";
+import UpdationForm from "./UpdationForm";
 
-
+let sampleTask:task = {
+  id:-1,
+  title:"CIA",
+  description:"3rd week of March",
+  completed:true,
+};
 // 
 //   {
 //     "id": 0,
@@ -25,6 +31,9 @@ function Body() {
   }
   const [isFormOpen, setisFormOpen]:[  boolean,
     React.Dispatch<React.SetStateAction<boolean>>] = useState(false);
+   
+    const [isUpdateOpen, setisUpdateOpen]:[task, React.Dispatch<React.SetStateAction<task>>]= useState(sampleTask);
+    
   useEffect(()=>{
      fetchTodo();
   },[])
@@ -32,14 +41,13 @@ function Body() {
     id:1,
     title:"DWT writeup",
     description:"today is the last day",
-    "completed":false,
+    completed:false,
   },{
     id:2,
     title:"CIA",
     description:"3rd week of March",
-    "completed":true,
+    completed:true,
   }]);
-  
 let f:number =0
   return (
     <>
@@ -52,15 +60,16 @@ let f:number =0
               if(!t.completed)
               {
                 f++;
-                return <TaskCard t={t}  id={t.id?t.id:index} setTasks={setTasks} tasks={tasks}/>
+                return <TaskCard t={t}  id={t.id?t.id:index} setisUpdateOpen={setisUpdateOpen} setTasks={setTasks} tasks={tasks}/>
               }
             })
           }
         </div>
         {!f && <div className="font-sm text-xl">No pending Tasks</div>}
-        {Tasks.length-f>0 && <Completed tasks={Tasks} setTasks={setTasks}/>}
-        {isFormOpen && <Form setTasks={setTasks} setisFormOpen = {setisFormOpen} isFormOpen={isFormOpen}/>}
-        {!isFormOpen && (
+        {Tasks.length-f>0 && <Completed setisUpdateOpen={setisUpdateOpen} tasks={Tasks} setTasks={setTasks}/>}
+        {isUpdateOpen.id==-1 && isFormOpen  &&  <Form setTasks={setTasks} setisFormOpen = {setisFormOpen} isFormOpen={isFormOpen}/>}
+        {!isFormOpen && isUpdateOpen.id!=-1 && <UpdationForm setTasks={setTasks} isUpdateOpen = {isUpdateOpen} setisUpdateOpen={setisUpdateOpen}/>}
+        {!isFormOpen && isUpdateOpen.id==-1 && (
           <button onClick={()=> setisFormOpen(!isFormOpen)} className=" text-[#FFFCFC]  absolute bottom-4 cursor-pointer h-[48px] w-[360px]  mx-auto bg-[#80BBE6] text-base font-bold rounded-sm">
             Add Task
           </button>

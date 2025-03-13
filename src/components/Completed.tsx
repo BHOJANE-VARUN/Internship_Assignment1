@@ -5,10 +5,11 @@ import { task } from "../constants/Types";
 interface CompType{
   tasks:task[],
   setTasks:React.Dispatch<React.SetStateAction<task[]>>,
+  setisUpdateOpen:React.Dispatch<React.SetStateAction<task>>
 }
 
 
-function Completed({tasks,setTasks}:CompType){
+function Completed({tasks,setTasks,setisUpdateOpen}:CompType){
   if(tasks.length==0)
   {
     return <div></div>
@@ -48,7 +49,7 @@ function Completed({tasks,setTasks}:CompType){
           />
         </svg> }
       </div>
-      {!Close && tasks.map((t:task,index:number,arr:task[])=> t.completed &&  <TaskCard t={t} id={t.id?t.id:index} setTasks={setTasks} tasks={arr}/>)}
+      {!Close && tasks.map((t:task,index:number,arr:task[])=> t.completed &&  <TaskCard setisUpdateOpen={setisUpdateOpen} t={t} id={t.id?t.id:index} setTasks={setTasks} tasks={arr}/>)}
     </div>
   );
 }

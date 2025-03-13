@@ -8,16 +8,16 @@ import axios from "axios";
 // }
 type CompProps = {
   setTasks: React.Dispatch<React.SetStateAction<task[]>>;
-  setisFormOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  isFormOpen: boolean;
+  isUpdateOpen: task;
+  setisUpdateOpen: React.Dispatch<React.SetStateAction<task>>;
 };
 
-function Form({ setTasks, setisFormOpen, isFormOpen }: CompProps) {
+function UpdationForm({ setTasks,setisUpdateOpen,isUpdateOpen }: CompProps) {
   
   const addTodo = async (data: task): Promise<any> => {
     try {
       console.log(JSON.stringify(data));
-      await axios.post("https://training-backend-api.onrender.com/todos",JSON.stringify(data),{
+      await axios.put(`https://training-backend-api.onrender.com/todos/${isUpdateOpen.id}`,JSON.stringify(data),{
         headers: {
           "Content-Type": "application/json",
         },
@@ -27,18 +27,23 @@ function Form({ setTasks, setisFormOpen, isFormOpen }: CompProps) {
     }
   };
   
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+  const [title, setTitle] = useState(isUpdateOpen.title);
+  const [description, setDescription] = useState(isUpdateOpen.description);
 
   const handleClose = (): void => {
-    setisFormOpen(!isFormOpen);
+    setisUpdateOpen((prev)=>{
+
+        let t = {...prev};
+        t.id = -1;
+        return t;
+    });
   };
 
   const handleSubmit = async () => {
     if (title.trim() === "" || description.trim() === "") return;
     
     const newTask: task = {
-      id:-1,
+        id:-1,
       title,
       description,
       completed: false,
@@ -46,17 +51,32 @@ function Form({ setTasks, setisFormOpen, isFormOpen }: CompProps) {
     //console.log(newTask);
     await addTodo(newTask);
 
-    setTasks((prevTasks) => [...prevTasks, newTask]);
+    setTasks((prevTasks) =>{
+        let t = [...prevTasks];
+        t.map((task)=>{
+            if(task.id === isUpdateOpen.id)
+            {
+                task.title = title;
+                task.description = description;
+            }
+        });
+        return t;
+    });
     setTitle("");
     setDescription("");
-    setisFormOpen(false);
+    setisUpdateOpen((prev)=>{
+
+        let t = {...prev};
+        t.id = -1;
+        return t;
+    });
   };
 
   return (
     <div className="w-[397px] h-[370px] border-2 border-gray-50 py-3 absolute -left-[1px] bottom-0 z-20 flex flex-col bg-white rounded-xl justify-between items-center">
       <div className="w-full border-0 px-4 flex flex-col space-y-4">
         <div className="w-full h-fit flex justify-between items-center">
-          <p className="font-medium text-balance">New Task</p>
+          <p className="font-medium text-balance">Edit Task</p>
           <div onClick={handleClose} className="cursor-pointer w-fit h-fit p-1 rounded-full bg-gray-200">
             <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
@@ -92,17 +112,17 @@ function Form({ setTasks, setisFormOpen, isFormOpen }: CompProps) {
           ></textarea>
         </label>
       </div>
-
+      
       <div className="w-fit h-fit bg-white text-[#FFFCFC] font-bold">
         <button
           className="cursor-pointer h-[48px] w-[360px] mx-auto bg-[#80BBE6] text-base font-semibold rounded-sm"
           onClick={handleSubmit}
         >
-          Submit
+          Update Task
         </button>
       </div>
     </div>
   );
 }
 
-export default Form;
+export default UpdationForm;

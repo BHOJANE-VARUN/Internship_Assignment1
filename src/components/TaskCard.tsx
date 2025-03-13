@@ -2,7 +2,7 @@ import React from "react";
 import { task } from "../constants/Types";
 import axios from "axios";
 
-function TaskCard({t,id,setTasks,tasks}:{t:task,id:number,setTasks:React.Dispatch<React.SetStateAction<task[]>>,tasks:task[]}) {
+function TaskCard({t,id,setTasks,tasks,setisUpdateOpen}:{t:task,id:number,setTasks:React.Dispatch<React.SetStateAction<task[]>>,tasks:task[],setisUpdateOpen:React.Dispatch<React.SetStateAction<task>>}) {
   //console.log(tasks);
   const putCompleted = async (data: task): Promise<any> => {
     try {
@@ -38,7 +38,9 @@ function TaskCard({t,id,setTasks,tasks}:{t:task,id:number,setTasks:React.Dispatc
     <div className="w-[360px] mx-auto max-h-full  min-h-[80px] flex">
       <div className=" w-[8px]  bg-[#80BBE6]  rounded-l-md"></div>
       <div className="flex p-5 justify-between items-center min-h-[80px] max-h-fit w-[99%] border-r-2 border-y-2 rounded-r-md border-gray-200">
-        <div className="h-fit">
+        <div onClick={()=>{
+          setisUpdateOpen(t);
+        }} className="h-fit">
           <h1 className="font-medium text-md">{t.title}</h1>
           <p className="text-[#8B8B8B] text-md font-medium">{t.description}</p>
         </div>
